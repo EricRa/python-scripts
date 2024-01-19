@@ -2,13 +2,13 @@ def print_help(object, filename):
     """
     Prints the help() and dir() text of a python object to a text file
     in the same directory.
-    
+
     If the file does not yet exist, it will be created.  If the file already exists, the output will be appended to the end of the file.
-    
+
     Example usage:
-    
+
         #saves output of the dir and help functions for ph to help.txt:
-    
+
         from print_help import print_help as ph
         ph(ph, "help.txt")
 
