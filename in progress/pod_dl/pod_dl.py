@@ -4,6 +4,13 @@ Podcast Downloader
 Attempts to download every episode of a podcast in a given
 RSS feed.
 
+
+Usage:
+
+python pod_dl.py -u [URL]
+
+Optionally, you can also provide the -t argument to return only the podcast
+titles without actually downloading anything.
 """
 
 import sys
@@ -11,18 +18,58 @@ import argparse
 
 import feedparser
 import requests
-from icecream import ic
 
-# rss test link
-test_rss = ("https://www.omnycontent.com/d/playlist/e73c998e"
-  "-6e60-432f-8610-ae210140c5b1/6a4a4e0f-8e8d-40e5-9d99-ae8601259"
-  "b78/0f0d9558-3e6e-4af7-971b-ae860127535c/podcast.rss")
-    
-ic(test_rss)
+def dl_with_requests(link, filename):
+    r2 = requests.get(link)
+    print(r2.status_code)
+    f = open(filename, "wb")
+    f.write(r2.content)
+    f.close()
 
 def pod_dl(url, titles):
-    pass
 
+    # Check to see if RSS URL can be accessed and, if so, get the feed
+    # using requests.  If not, return the http error code and end the program.
+    try:
+        r = requests.get(url)
+    except Exception as e:
+        print(f"There was an error: {e}.\n\nPlease ensure that a valid URL"
+          " was provided.")
+        sys.exit()
+        
+    status = r.status_code
+    if status == 200:
+        pass
+    else:
+        print("There was a problem accessing the RSS feed.  HTTP Status "
+          f"code {status} was returned.  Please ensure that the RSS URL"
+          " provided is accessable from a web browser.")
+        sys.exit()
+        
+    # Parse the feed with feedparser
+    d = feedparser.parse(r.text)
+    
+    # check to see if titles argument is True.  If so, print a list of titles
+    # and end the program
+    if titles is True:
+        for item in d.entries:
+            print(item.title)
+        sys.exit()
+    else:
+        pass
+    
+    # Download all episodes
+    
+
+    for item in d.entries:
+        pod_url = item.links[0].href
+        print(pod_url)
+        file = item.title + ".mp3"
+        print(f"Now downloading: {file}")
+        dl_with_requests(pod_url,file)
+        
+    
+    
 # argument parser
 
 parser = argparse.ArgumentParser(
