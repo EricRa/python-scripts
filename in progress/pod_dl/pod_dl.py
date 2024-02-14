@@ -21,7 +21,6 @@ import requests
 
 def dl_with_requests(link, filename):
     r2 = requests.get(link)
-    print(r2.status_code)
     f = open(filename, "wb")
     f.write(r2.content)
     f.close()
