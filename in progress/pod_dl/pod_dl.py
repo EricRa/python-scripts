@@ -66,9 +66,14 @@ def pod_dl(url, titles):
         for link in item.enclosures:
             pod_url = link.get("href")
             print(pod_url)
-            file = item.title + ".mp3"
-            print(f"Now downloading: {file}")
-            dl_with_requests(pod_url,file)
+            filename = item.title + ".mp3"
+            filename = filename.replace(":", "-")
+            filename = filename.replace(" ", "_")
+            filename = filename.replace("/", "_")
+            filename = filename.replace("?", "_")
+            #print(filename)
+            print(f"Now downloading: {filename}")
+            dl_with_requests(pod_url,filename)
     
 # argument parser
 
