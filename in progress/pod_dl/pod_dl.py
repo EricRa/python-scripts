@@ -16,14 +16,17 @@ titles without actually downloading anything.
 import sys
 import argparse
 
+
 import feedparser
 import requests
 
 def dl_with_requests(link, filename):
     r2 = requests.get(link)
-    f = open(filename, "wb")
-    f.write(r2.content)
-    f.close()
+    #print(type(r2.content))
+    #print(sys.getsizeof(r2.content))
+    with open(filename, "wb") as f:
+        f.write(r2.content)
+        #print(sys.getsizeof(f))
 
 def pod_dl(url, titles):
 
@@ -59,15 +62,13 @@ def pod_dl(url, titles):
     
     # Download all episodes
     
-
     for item in d.entries:
-        pod_url = item.links[0].href
-        print(pod_url)
-        file = item.title + ".mp3"
-        print(f"Now downloading: {file}")
-        dl_with_requests(pod_url,file)
-        
-    
+        for link in item.enclosures:
+            pod_url = link.get("href")
+            print(pod_url)
+            file = item.title + ".mp3"
+            print(f"Now downloading: {file}")
+            dl_with_requests(pod_url,file)
     
 # argument parser
 
