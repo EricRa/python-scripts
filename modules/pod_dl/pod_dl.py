@@ -4,7 +4,8 @@ Podcast Downloader
 Attempts to download every episode of a podcast in a given
 RSS feed.
 
-Note that this downloads the most recent episodes first, and you can just cancel the script at any time if you don't want all the episodes.
+Note that this downloads the most recent episodes first, and you can 
+just cancel the script at any time if you don't want all the episodes.
 
 Usage:
 
